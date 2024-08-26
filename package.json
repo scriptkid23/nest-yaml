@@ -1,0 +1,37 @@
+{
+  "name": "yaml-config-loader-nestjs",
+  "version": "1.0.6",
+  "description": "A NestJS module for loading configuration from YAML files with environment-specific support.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "nestjs",
+    "yaml",
+    "config",
+    "module",
+    "environment"
+  ],
+  "eslintIgnore": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Hoan Do.",
+  "license": "MIT",
+  "dependencies": {
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.2.0",
+    "yaml": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
