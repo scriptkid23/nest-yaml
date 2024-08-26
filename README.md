@@ -80,17 +80,17 @@ Configure your `package.json` to use different YAML files based on the environme
    ```typescript
    import { Controller, Get } from '@nestjs/common';
    import { AppService } from './app.service';
-   import { YamlConfigService } from 'yaml-config-loader-nestjs';
+   import { ConfigService } from 'yaml-config-loader-nestjs';
 
    @Controller()
    export class AppController {
-     constructor(private readonly appService: AppService, private readonly yamlService: YamlConfigService) {}
+     constructor(private readonly appService: AppService, private readonly configService: ConfigService) {}
 
      @Get()
      getHello(): string {
        // Access a nested configuration value
-       console.log(`HTTP Port: ${this.yamlService.getNested('http.port')}`);
-       console.log(`Database Host: ${this.yamlService.getNested('database.host')}`);
+       console.log(`HTTP Port: ${this.configService.getNested('http.port')}`);
+       console.log(`Database Host: ${this.configService.getNested('database.host')}`);
        return this.appService.getHello();
      }
    }
