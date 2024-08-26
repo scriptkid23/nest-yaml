@@ -11,6 +11,8 @@
     "build": "tsc -p tsconfig.build.json",
     "prepublishOnly": "npm run build"
   },
+  "repository": "https://github.com/scriptkid23/nest-yaml",
+  "homepage": "https://github.com/scriptkid23/nest-yaml",
   "keywords": [
     "nestjs",
     "yaml",
@@ -24,7 +26,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "author": "Hoan Do.",
+  "author": {
+    "name": "Hoando.",
+    "email": "hoando.dev@gmail.com",
+    "url": "https://github.com/scriptkid23"
+  },
   "license": "MIT",
   "dependencies": {
     "@nestjs/common": "^9.0.0",
