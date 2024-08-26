@@ -46,31 +46,15 @@ export class YamlConfigLoaderModule {
         const keys = [...Object.keys(env), ...transformers];
 
         return keys.map((key) => {
-            return registerAs(key, async () => {
-                const filePath = join(process.cwd(), 'dist', 'config', `${key}.config`);
-                try {
-                    const importedModule = await import(filePath);
-                    const loadFn = Object.values(importedModule)[0];
-
-                    if (typeof loadFn !== 'function') {
-                        console.warn(`The loaded module for key: ${key} does not export a function. Using environment value instead.`);
-                        return env[key];
-                    }
-
-                    return loadFn(env);
-                } catch (error) {
-                    if (error instanceof Error) {
-                        if (error.message.includes('Cannot find module')) {
-                            console.error(`Could not find configuration file for key: ${key} at path: ${filePath}.`);
-                        } else {
-                            console.error(`Failed to load configuration for key: ${key} from file ${filePath}. Error: ${error.message}`);
-                        }
-                    } else {
-                        console.error(`Failed to load configuration for key: ${key} from file ${filePath}. Unknown error`);
-                    }
+            return registerAs(key, () => {
+                if (env[key] !== undefined) {
                     return env[key];
                 }
+
+                console.warn(`Configuration for key: ${key} not found in YAML file.`);
+                return undefined;
             });
         });
     }
+
 }

@@ -1,73 +1,119 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# `yaml-config-loader-nestjs`
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+`yaml-config-loader-nestjs` is a NestJS library that enables you to use YAML files for configuration, providing type safety compared to traditional `.env` files.
 
 ## Installation
 
-```bash
-$ pnpm install
-```
-
-## Running the app
+To install the library, use npm:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+npm install yaml-config-loader-nestjs
 ```
 
-## Test
+## Configuration
 
-```bash
-# unit tests
-$ pnpm run test
+### 1. Create YAML Configuration Files
 
-# e2e tests
-$ pnpm run test:e2e
+Create a default YAML configuration file with various settings. For example, create a file named `.env.yaml` with the following content:
 
-# test coverage
-$ pnpm run test:cov
+```yaml
+app:
+  name: "MyApp"
+  version: "1.0.0"
+  environment: "development"
+http:
+  port: 8080
+  host: "localhost"
+database:
+  host: "127.0.0.1"
+  port: 5432
+  username: "user"
+  password: "password"
+  name: "mydatabase"
+logging:
+  level: "debug"
+  file: "app.log"
 ```
 
-## Support
+Create additional environment-specific YAML files as needed:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `.env.development.yaml` for development settings.
+- `.env.production.yaml` for production settings.
 
-## Stay in touch
+### 2. Set Up Environment-Specific Scripts
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Configure your `package.json` to use different YAML files based on the environment. Add the following scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "start:dev": "NODE_ENV=development nest start --watch",
+    "start:prod": "NODE_ENV=production node dist/main"
+  }
+}
+```
+
+### 3. Integrate `yaml-config-loader-nestjs` in Your Application
+
+1. **Initialize the `YamlConfigLoaderModule`:**
+
+   Import and configure `YamlConfigLoaderModule` in your main module (`AppModule`):
+
+   ```typescript
+   import { Module } from '@nestjs/common';
+   import { AppController } from './app.controller';
+   import { AppService } from './app.service';
+   import { YamlConfigLoaderModule } from 'yaml-config-loader-nestjs';
+
+   @Module({
+     imports: [YamlConfigLoaderModule.forRoot()],
+     controllers: [AppController],
+     providers: [AppService],
+   })
+   export class AppModule {}
+   ```
+
+2. **Access Configuration Values:**
+
+   Use `YamlConfigService` to retrieve configuration values in your controllers or services:
+
+   ```typescript
+   import { Controller, Get } from '@nestjs/common';
+   import { AppService } from './app.service';
+   import { YamlConfigService } from 'yaml-config-loader-nestjs';
+
+   @Controller()
+   export class AppController {
+     constructor(private readonly appService: AppService, private readonly yamlService: YamlConfigService) {}
+
+     @Get()
+     getHello(): string {
+       // Access a nested configuration value
+       console.log(`HTTP Port: ${this.yamlService.getNested('http.port')}`);
+       console.log(`Database Host: ${this.yamlService.getNested('database.host')}`);
+       return this.appService.getHello();
+     }
+   }
+   ```
+
+### 4. Example Usage
+
+- **Development Mode:** Run your application with development settings by using:
+
+  ```bash
+  npm run start:dev
+  ```
+
+  This will load configurations from `.env.development.yaml`.
+
+- **Production Mode:** Run your application with production settings by using:
+
+  ```bash
+  npm run start:prod
+  ```
+
+  This will load configurations from `.env.production.yaml`.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This library is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
