@@ -1,7 +1,3 @@
-Great choice! Here's an updated version of the README with the chosen name `"nest-yaml"`:
-
----
-
 # `nest-yaml`
 
 `nest-yaml` is a NestJS library that enables you to use YAML files for configuration, offering a more structured and readable alternative to traditional `.env` files.
@@ -126,7 +122,3 @@ Configure your `package.json` to load different YAML files based on the environm
 ## License
 
 This library is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
----
-
-This version reflects the new name, `nest-yaml`, and keeps the instructions clear and concise.
