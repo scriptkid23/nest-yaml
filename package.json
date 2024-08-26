@@ -1,6 +1,6 @@
 {
-  "name": "yaml-config-loader-nestjs",
-  "version": "1.1.0",
+  "name": "nest-yaml",
+  "version": "1.0.0",
   "description": "A NestJS module for loading configuration from YAML files with environment-specific support.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,9 +29,10 @@
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
-    "yaml": "^2.0.0"
+    "yaml": "^2.5.0"
   },
   "devDependencies": {
+    "@types/node": "^22.5.0",
     "typescript": "^5.0.0"
   }
 }
