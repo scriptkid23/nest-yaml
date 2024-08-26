@@ -83,11 +83,11 @@ Configure your `package.json` to load different YAML files based on the environm
    ```typescript
    import { Controller, Get } from '@nestjs/common';
    import { AppService } from './app.service';
-   import { ConfigService } from 'nest-yaml';
+   import { YamlConfigService } from 'nest-yaml';
 
    @Controller()
    export class AppController {
-     constructor(private readonly appService: AppService, private readonly configService: ConfigService) {}
+     constructor(private readonly appService: AppService, private readonly configService: YamlConfigService) {}
 
      @Get()
      getHello(): string {
